@@ -2,12 +2,18 @@
 // Readings between 4.5mm and 6mm 
 
 //PARAMETERS
-#define N_MESURES 4       //Average buffer len; recomended between[1..4]
-#define SENSOR   1        //1-GP2Y0AH01K0F; 2-GP2Y0A 
-#define trigger  1        //1-Auto; 2-Externel trigger(PIN 13)
-#define loop_delay  500   //[0..1000]ms 
+#define N_MESURES    4    //Average buffer len; recomended between[1..4]
+#define SENSOR       1    //1-GP2Y0AH01K0F; 2-GP2Y0A21YKOF (NOT IMPLEMENTED YET)
+#define TRIGGER      2    //1-Auto; 2-Externel trigger(PIN 7)
+#define LOOP_DELAY  500   //[0..1000]ms 
 
+//Hardware
+//Sensor       +5V; Gnd; A0
+//Push button  GND-PIN7
+//Pushbutton
+int inPin = 7;   // choose the input pin (for a pushbutton)
 
+  
 int distancePin;
 int average;
 double d_distance;
@@ -15,6 +21,9 @@ double d_aux, d_aux2;
 int a_measures[N_MESURES];
 
 void setup() {
+//Pushbutton
+pinMode(inPin, INPUT_PULLUP);    // declare pushbutton as input
+
   Serial.begin(9600);
     
   pinMode(distancePin, INPUT);
@@ -30,6 +39,20 @@ void setup() {
   Serial.print("\t");  
   Serial.print("mm");
   Serial.println("\t"); 
+}
+
+//Detect positive transition.
+void switchChange(){
+  int val = 0;     // variable for reading the pin status
+  
+  do{
+    val = digitalRead(inPin);  // read input value
+  }while(val);
+  do{
+    val = digitalRead(inPin);  // read input value
+  }while(!val);
+
+  
 }
 
 void loop() {
@@ -61,5 +84,8 @@ void loop() {
   Serial.print(d_distance, 2);   
   Serial.println("\t");  
  
-  delay(1000); //make it readable
+  delay(LOOP_DELAY); //make it readable
+  if(TRIGGER ==2 ){
+    switchChange();
+  }
 }
