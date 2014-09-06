@@ -7,7 +7,6 @@
 #define TRIGGER      2    //1-Auto; 2-Externel trigger(PIN 7)
 #define LOOP_DELAY  500   //[0..1000]ms 
 
-
 //Hardware
 //Sensor       +5V; Gnd; A0
 //Push button  GND-PIN7
